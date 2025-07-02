@@ -1,10 +1,18 @@
 class Score {
+    private static instance: Score;
     get totalScore(){
         const foods = Foods.getInstance();
         return foods.activeElementsScore.reduce((total, score) => total + score, 0)
     }
     render() {
         document.querySelector('.score__number')!.textContent = String(this.totalScore);
+    }
+    private constructor(){}
+    static getInstance() {
+        if (!Score.instance) {
+            Score.instance = new Score();
+        }
+        return Score.instance;
     }
  }
 class Food {
@@ -13,7 +21,7 @@ class Food {
     }
     clickEventHandler(){
         this.element.classList.toggle('food--active');
-        const score = new Score();
+        const score = Score.getInstance();
         score.render();
     }
  }
