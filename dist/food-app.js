@@ -1,5 +1,12 @@
 "use strict";
 class Score {
+    get totalScore() {
+        const foods = Foods.getInstance();
+        return foods.activeElementsScore.reduce((total, score) => total + score, 0);
+    }
+    render() {
+        document.querySelector('.score__number').textContent = String(this.totalScore);
+    }
 }
 class Food {
     constructor(element) {
@@ -8,6 +15,8 @@ class Food {
     }
     clickEventHandler() {
         this.element.classList.toggle('food--active');
+        const score = new Score();
+        score.render();
     }
 }
 class Foods {
@@ -38,5 +47,11 @@ class Foods {
             new Food(element);
         });
     }
+    static getInstance() {
+        if (!Foods.instance) {
+            Foods.instance = new Foods();
+        }
+        return Foods.instance;
+    }
 }
-const foods = new Foods();
+const foods = Foods.getInstance();
